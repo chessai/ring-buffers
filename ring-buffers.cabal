@@ -1,0 +1,61 @@
+cabal-version:       2.0
+name:                ring-buffers
+version:             0.0.0
+synopsis:            mutable ring buffers with atomic updates in GHC Haskell
+description:         mutable ring buffers with atomic updates in GHC Haskell
+homepage:            https://github.com/chessai/ring-buffers
+bug-reports:         https://github.com/chessai/ring-buffers/issues
+license:             BSD3
+license-file:        LICENSE
+author:              chessai
+maintainer:          chessai1996@gmail.com
+copyright:           2019 chessai
+category:            Data
+build-type:          Simple
+extra-doc-files:     README.md
+                   , CHANGELOG.md
+tested-with:         GHC == 8.2.2, GHC == 8.4.4, GHC == 8.6.3
+
+source-repository head
+  type:                git
+  location:            https://github.com/chessai/ring-buffers.git
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     RingBuffers
+                       
+
+  build-depends:       base >= 4.10.1.0 && < 4.13
+                     
+
+  ghc-options:         -Wall
+                       -Wincomplete-uni-patterns
+                       -Wincomplete-record-updates
+                       -Wcompat
+                       -Widentities
+                       -Wredundant-constraints
+                       -fhide-source-paths
+
+  default-language:    Haskell2010
+
+test-suite ring-buffers-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+
+  build-depends:       base >= 4.10.1.0 && < 4.13
+                     , ring-buffers
+                     
+
+  ghc-options:         -Wall
+                       -threaded
+                       -rtsopts
+                       -with-rtsopts=-N
+                       -Wincomplete-uni-patterns
+                       -Wincomplete-record-updates
+                       -Wcompat
+                       -Widentities
+                       -Wredundant-constraints
+                       -fhide-source-paths
+
+  default-language:    Haskell2010
