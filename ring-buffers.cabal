@@ -44,15 +44,31 @@ library
     Prelude
   build-depends:
     , base >= 4.10.1 && < 4.13
-    , contiguous >= 0.3
-    , primitive >= 0.6.4
     , semirings >= 0.3
   mixins:
     base hiding (Prelude)
+  if flag(checked)
+    build-depends:
+      , contiguous-checked >= 0.3.2
+      , primitive-checked >= 0.6.4.1
+  else
+    build-depends:
+      , contiguous >= 0.3.2
+      , primitive >= 0.6.4
   ghc-options:
     -Wall
   default-language:
     Haskell2010
+
+flag checked
+  description:
+    Check all array indexing. This makes most functions slower, but
+    it replaces segfaults with descriptive errors. This should only
+    be used for debugging.
+  default:
+    False
+  manual:
+    True
 
 source-repository head
   type:
