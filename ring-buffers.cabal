@@ -43,10 +43,12 @@ library
   other-modules:
     Prelude
   build-depends:
-    , base-noprelude >= 4.10.1 && < 4.13
+    , base >= 4.10.1 && < 4.13
     , contiguous >= 0.3
     , primitive >= 0.6.4
-    , semirings >= 0.3                 
+    , semirings >= 0.3
+  mixins:
+    base hiding (Prelude)
   ghc-options:
     -Wall
   default-language:
