@@ -35,13 +35,12 @@ library
   hs-source-dirs:
     src
   exposed-modules:
-    RingBuffers.Internal
-
     RingBuffers.Lifted
     RingBuffers.Unlifted
     RingBuffers.Unboxed
   other-modules:
     Prelude
+    RingBuffers.Internal
   build-depends:
     , base >= 4.10.1 && < 4.13
     , semirings >= 0.3
