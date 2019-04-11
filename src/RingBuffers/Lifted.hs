@@ -12,6 +12,7 @@ module RingBuffers.Lifted
 
 import qualified RingBuffers.Internal as I
 
+-- | A concurrent, mutable ring buffer that supports atomic updates.
 newtype RingBuffer a = RingBuffer (I.RingBuffer Array a)
 
 -- | Return a new ring buffer of the specified size.
