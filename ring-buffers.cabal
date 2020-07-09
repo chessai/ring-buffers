@@ -42,7 +42,7 @@ library
     Prelude
     RingBuffers.Internal
   build-depends:
-    , base >= 4.10.1 && < 4.13
+    , base >= 4.10.1 && < 5
     , semirings >= 0.3
   mixins:
     base hiding (Prelude)
