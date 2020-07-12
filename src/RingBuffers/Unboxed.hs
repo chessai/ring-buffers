@@ -54,7 +54,7 @@ append :: (Prim a)
 append x rb = I.append x (coerce rb)
 
 -- | Execute the given action with the items of the ring, accumulating its results.
--- 
+--
 foldMap :: (Prim a, Monoid b)
   => RingBuffer a
   -> (a -> IO b)
