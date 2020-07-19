@@ -3,7 +3,7 @@ module RingBuffers.Unboxed
   , new
   , clear
   , append
---  ,concat
+  , extend
   , capacity
   , filledLength
   , latest
@@ -53,6 +53,16 @@ append :: (Prim a)
   -> IO ()
 append x rb = I.append x (coerce rb)
 
+-- | Write multiple items to the end of the ring.
+--
+--   Ignores any elements of the input array whose indices
+--   are higher than the length of the ring buffer.
+extend :: (Prim a)
+  => PrimArray a
+  -> RingBuffer a
+  -> IO ()
+extend x rb = I.extend x (coerce rb)
+
 -- | Execute the given action with the items of the ring, accumulating its results.
 --
 foldMap :: (Prim a, Monoid b)
@@ -60,18 +70,3 @@ foldMap :: (Prim a, Monoid b)
   -> (a -> IO b)
   -> IO b
 foldMap rb action = I.foldMap (coerce rb) action
-
-{-
--- | Operate atomically on a buffer.
-withRing :: ()
-  => RingBuffer a -- ^ buffer to operate on
-  -> (MutableArray RealWorld a -> RingState -> IO (RingState, r)) -- ^ function that takes a buffer, a ring state, and returns a new ring state with a value.
-  -> IO r
-withRing rb f = I.withRing (coerce rb) f
-
--- | Advance the ring buffer's state by the given number of elements
-advance :: ()
-  => Int
-  -> (MutableArray RealWorld a -> RingState -> IO (RingState, ()))
-advance n = I.advance n
--}

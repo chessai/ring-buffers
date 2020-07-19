@@ -1,4 +1,5 @@
 {-# language BangPatterns #-}
+{-# language TypeFamilies #-}
 
 module RingBuffers.Internal
   ( RingBuffer(..)
@@ -10,6 +11,7 @@ module RingBuffers.Internal
   , filledLength
   , latest
   , advance
+  , extend
   , append
   , foldMap
   ) where
@@ -30,6 +32,7 @@ ringState0 :: RingState
 ringState0 = RingState False 0
 {-# inline ringState0 #-}
 
+-- TODO use withMVar
 withRing :: (Contiguous arr, Element arr a)
   => RingBuffer arr a
   -> (Mutable arr RealWorld a -> RingState -> IO (RingState, r))
@@ -104,6 +107,22 @@ append x rb = withRing rb $ \ba bs -> do
   Contiguous.write ba (_ringStateHead bs) x
   advance 1 ba bs
 {-# inline append #-}
+
+extend :: (Contiguous arr, Element arr a)
+  => arr a
+  -> RingBuffer arr a
+  -> IO ()
+extend xs rb = withRing rb $ \ba bs -> do
+  cap <- capacity rb
+  let extensionLength = min (Contiguous.size xs) cap
+  let currentHead = _ringStateHead bs
+  let go !ix = when (ix < extensionLength) $ do
+        atIx <- Contiguous.indexM xs ix
+        Contiguous.write ba (currentHead + ix) atIx
+        go (ix + 1)
+  go 0
+  advance extensionLength ba bs
+{-# inlineable extend #-}
 
 foldMap :: (Contiguous arr, Element arr a, Monoid b)
   => RingBuffer arr a
