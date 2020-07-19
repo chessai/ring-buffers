@@ -9,6 +9,8 @@ The changelog is available [on GitHub][2].
 * Add `extend` function
 * Add `unsafeLatest` function
 * Add `toList` function
+* Add minimal test suite
+* Change Internal.withRing to use exception-safe modifyMVar
 
 0.0.0
 =====
