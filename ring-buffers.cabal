@@ -72,6 +72,36 @@ flag checked
   manual:
     True
 
+test-suite properties
+  type:
+    exitcode-stdio-1.0
+  hs-source-dirs:
+    test
+  main-is:
+    Properties.hs
+  build-depends:
+    , QuickCheck
+    , base
+    , primitive
+    , ring-buffers
+  default-language:
+    Haskell2010
+
+test-suite unit
+  type:
+    exitcode-stdio-1.0
+  hs-source-dirs:
+    test
+  main-is:
+    Unit.hs
+  build-depends:
+    , HUnit
+    , base
+    , primitive
+    , ring-buffers
+  default-language:
+    Haskell2010
+
 source-repository head
   type:
     git
