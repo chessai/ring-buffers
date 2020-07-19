@@ -35,16 +35,11 @@ ringState0 :: RingState
 ringState0 = RingState False 0
 {-# inline ringState0 #-}
 
--- TODO use withMVar
 withRing :: (Contiguous arr, Element arr a)
   => RingBuffer arr a
   -> (Mutable arr RealWorld a -> RingState -> IO (RingState, r))
   -> IO r
-withRing (RingBuffer ba bs) f = do
-  s <- takeMVar bs
-  (s',r) <- f ba s
-  putMVar bs s'
-  pure r
+withRing (RingBuffer ba bs) f = modifyMVar bs (f ba)
 {-# inline withRing #-}
 
 new :: (Contiguous arr, Element arr a)
