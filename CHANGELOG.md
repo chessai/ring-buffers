@@ -6,6 +6,7 @@ The changelog is available [on GitHub][2].
 0.1.1
 =====
 * Fix builds with newer primitive.
+* Add `extend` function
 
 0.0.0
 =====
