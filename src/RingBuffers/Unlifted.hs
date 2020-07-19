@@ -9,6 +9,7 @@ module RingBuffers.Unlifted
   , latest
   , unsafeLatest
   , foldMap
+  , toList
   ) where
 
 import qualified RingBuffers.Internal as I
@@ -81,3 +82,10 @@ foldMap :: (PrimUnlifted a, Monoid b)
   -> (a -> IO b)
   -> IO b
 foldMap rb action = I.foldMap (coerce rb) action
+
+-- | Convert the entire contents of the ring into a list,
+--   with the most recently added element at the head.
+toList :: (PrimUnlifted a)
+  => RingBuffer a
+  -> IO [a]
+toList rb = I.toList (coerce rb)

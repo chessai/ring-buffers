@@ -8,6 +8,7 @@ The changelog is available [on GitHub][2].
 * Fix builds with newer primitive.
 * Add `extend` function
 * Add `unsafeLatest` function
+* Add `toList` function
 
 0.0.0
 =====
