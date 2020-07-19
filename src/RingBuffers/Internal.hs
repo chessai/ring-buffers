@@ -1,4 +1,5 @@
 {-# language BangPatterns #-}
+{-# language TupleSections #-}
 {-# language TypeFamilies #-}
 
 module RingBuffers.Internal
@@ -10,10 +11,12 @@ module RingBuffers.Internal
   , capacity
   , filledLength
   , latest
+  , unsafeLatest
   , advance
   , extend
   , append
   , foldMap
+  , toList
   ) where
 
 import qualified Data.Primitive.Contiguous as Contiguous
@@ -79,16 +82,22 @@ latest :: (Contiguous arr, Element arr a)
   => RingBuffer arr a
   -> Int
   -> IO (Maybe a)
-latest rb n = withRing rb $ \ba bs@(RingState _ hd) -> do
+latest rb n = do
   len <- filledLength rb
   if n >= len
-    then pure (bs, Nothing)
-    else do
-      cap <- capacity rb
-      let idx = (hd - n - 1) `mod` cap
-      v <- Contiguous.read ba idx
-      pure (bs, Just v)
+    then pure Nothing
+    else Just <$> unsafeLatest rb n
 {-# inline latest #-}
+
+unsafeLatest :: (Contiguous arr, Element arr a)
+  => RingBuffer arr a
+  -> Int
+  -> IO a
+unsafeLatest rb n = do
+  cap <- capacity rb
+  withRing rb $ \ba bs@(RingState _ hd) -> do
+    let idx = (hd - n - 1) `mod` cap
+    (bs,) <$> Contiguous.read ba idx
 
 advance :: (Contiguous arr, Element arr a)
   => Int
@@ -139,3 +148,10 @@ foldMap rb action = withRing rb $ \ba bs -> do
           pure (bs, acc)
   go 0 mempty
 {-# inline foldMap #-}
+
+toList :: (Contiguous arr, Element arr a)
+  => RingBuffer arr a
+  -> IO [a]
+toList rb = do
+  len <- filledLength rb
+  mapM (unsafeLatest rb) [0..len-1]

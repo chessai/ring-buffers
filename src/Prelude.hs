@@ -4,12 +4,12 @@ module Prelude
 
 import Control.Applicative as P (pure)
 import Control.Concurrent.MVar as P
-import Control.Monad as P ((=<<), when)
+import Control.Monad as P ((=<<), when, mapM)
 import Control.Monad.Primitive as P (PrimMonad(..))
 import Data.Bool as P (Bool(..), (&&), (||))
 import Data.Coerce as P (coerce)
 import Data.Function as P (($))
-import Data.Functor as P (fmap)
+import Data.Functor as P (fmap, (<$>))
 import Data.Int as P (Int)
 import Data.Maybe as P (Maybe(..))
 import Data.Monoid as P (Monoid(..))

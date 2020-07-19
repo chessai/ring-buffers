@@ -7,6 +7,7 @@ module RingBuffers.Unlifted
   , capacity
   , filledLength
   , latest
+  , unsafeLatest
   , foldMap
   ) where
 
@@ -45,6 +46,16 @@ latest :: (PrimUnlifted a)
   -> Int
   -> IO (Maybe a)
 latest rb n = I.latest (coerce rb) n
+
+-- | Retrieve the \(n\)th most-recently added item of the ring
+--
+--   /Note/: This function may exhibit undefined behaviour if
+--   the index is out-of-bounds or uninitialised.
+unsafeLatest :: (PrimUnlifted a)
+  => RingBuffer a
+  -> Int
+  -> IO a
+unsafeLatest rb n = I.unsafeLatest (coerce rb) n
 
 -- | Add an item to the end of the buffer.
 append :: (PrimUnlifted a)
