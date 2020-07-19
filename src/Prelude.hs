@@ -4,7 +4,7 @@ module Prelude
 
 import Control.Applicative as P (pure)
 import Control.Concurrent.MVar as P
-import Control.Monad as P ((=<<), when, mapM)
+import Control.Monad as P ((=<<), when, forM, mapM)
 import Control.Monad.Primitive as P (PrimMonad(..))
 import Data.Bool as P (Bool(..), (&&), (||))
 import Data.Coerce as P (coerce)
