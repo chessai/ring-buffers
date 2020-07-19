@@ -3,6 +3,10 @@
 `ring-buffers` uses [PVP Versioning][1].
 The changelog is available [on GitHub][2].
 
+0.1.1
+=====
+* Fix builds with newer primitive.
+
 0.0.0
 =====
 
