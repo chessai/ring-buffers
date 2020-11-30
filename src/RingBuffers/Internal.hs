@@ -140,16 +140,19 @@ foldMap :: (Contiguous arr, Element arr a, Monoid b)
   => RingBuffer arr a
   -> (a -> IO b)
   -> IO b
-foldMap rb action = withRing rb $ \ba bs -> do
-  n <- filledLength rb
-  let go !ix !acc = if ix < n
-        then do
-          v <- Contiguous.read ba ix
-          m <- action v
-          go (ix + 1) (acc <> m)
-        else
-          pure (bs, acc)
-  go 0 mempty
+foldMap rb action = do
+  withRing rb $ \ba bs@(RingState full pos) -> do
+    n <- do
+      cap <- capacity rb
+      pure $ if full then cap else pos
+    let go !ix !acc = if ix < n
+          then do
+            v <- Contiguous.read ba ix
+            m <- action v
+            go (ix + 1) (acc <> m)
+          else
+            pure (bs, acc)
+    go 0 mempty
 {-# inline foldMap #-}
 
 toList :: (Contiguous arr, Element arr a)
