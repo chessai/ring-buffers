@@ -1,3 +1,4 @@
+-- | A concurrent, mutable ring buffer that supports atomic updates. This module supports buffers containing all lifted types. If you are using a buffer which contains some unboxable or unliftable type, consider using 'RingBuffers.Unboxed' or 'RingBuffers.Unlifted'.
 module RingBuffers.Lifted
   ( RingBuffer
   , new

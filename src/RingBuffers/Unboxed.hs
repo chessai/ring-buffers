@@ -1,3 +1,4 @@
+-- | A concurrent, mutable ring buffer that supports atomic updates. This module is most efficient on buffers containing unlifted types.
 module RingBuffers.Unboxed
   ( RingBuffer
   , new
