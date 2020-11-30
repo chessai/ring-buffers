@@ -66,11 +66,13 @@ capacity (RingBuffer buf _) = Contiguous.sizeMutable buf
 filledLength :: (Contiguous arr, Element arr a)
   => RingBuffer arr a
   -> IO Int
-filledLength rb = withRing rb $ \_ rs@(RingState full pos) -> if full
-  then do
-    cap <- capacity rb
-    pure (rs,cap)
-  else pure (rs,pos)
+filledLength rb = do
+  withRing rb $ \_ rs@(RingState full pos) ->
+    if full
+      then do
+        cap <- capacity rb
+        pure (rs,cap)
+      else pure (rs,pos)
 {-# inline filledLength #-}
 
 latest :: (Contiguous arr, Element arr a)
@@ -78,10 +80,16 @@ latest :: (Contiguous arr, Element arr a)
   -> Int
   -> IO (Maybe a)
 latest rb n = do
-  len <- filledLength rb
-  if n >= len
-    then pure Nothing
-    else Just <$> unsafeLatest rb n
+  withRing rb $ \ra rs@(RingState full pos) -> do
+    cap <- capacity rb
+    let len = if full then cap else pos
+    if n >= len
+      then do
+        pure (rs, Nothing)
+      else do
+        let ix = (pos - n - 1) `mod` cap
+        a <- Contiguous.read ra ix
+        pure $ (rs, Just a)
 {-# inline latest #-}
 
 unsafeLatest :: (Contiguous arr, Element arr a)
